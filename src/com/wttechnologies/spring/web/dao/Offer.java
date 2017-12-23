@@ -1,9 +1,21 @@
 package com.wttechnologies.spring.web.dao;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+import com.wttechnologies.spring.web.validation.ValidEmail;
+
 public class Offer {
 
 	// Properties
-	private String name, email, text;
+	@Size(min=5, max=100, message="Name must be between 5 and 100 characters")
+	private String name;
+	@NotNull
+	@ValidEmail
+	private String email;
+	@Size(min=5, max=100, message="Name must be between 5 and 100 characters")
+	private String text;
 	private int id;
 
 	public Offer() {
