@@ -7,6 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-Offer created: <a href="${pageContext.request.contextPath }/offers"> Click here to view offers</a>
+An error has occurred. The database may be down, please use browser back button, and try again,
+or try again later.
 </body>
 </html>

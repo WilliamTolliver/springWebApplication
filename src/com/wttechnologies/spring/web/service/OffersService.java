@@ -22,4 +22,12 @@ public class OffersService {
 	public void setOffersDAO(OffersDAO offersDAO) {
 		this.offersDAO = offersDAO;
 	}
+	
+	public void createOffer(Offer offer) {
+		offersDAO.create(offer);
+	}
+	
+	public void throwTextException() {
+		offersDAO.findOffer(99999);
+	}
 }
