@@ -10,6 +10,7 @@
 		<config>WebContent/WEB-INF/offers-servlet.xml</config>
 		<config>src/com/wttechnologies/spring/web/config/dao-beans.xml</config>
 		<config>src/com/wttechnologies/spring/web/config/service-context.xml</config>
+		<config>src/com/wttechnologies/spring/web/config/security-context.xml</config>
 	</configs>
 	<autoconfigs>
 	</autoconfigs>
