@@ -2275,6 +2275,10 @@ select.form-control-lg:not([size]):not([multiple]), .input-group-lg > select.for
   color: #FF4136;
 }
 
+.invalid-feedback-w {
+  color: #FF4136;
+}
+
 .invalid-tooltip {
   position: absolute;
   top: 100%;
