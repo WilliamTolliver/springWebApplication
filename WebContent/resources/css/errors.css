@@ -1,9 +1,17 @@
 @charset "ISO-8859-1";
 
 p.login-error-w{
-	color: red;
+	color: #FF4136;
 }
 
-login-error-w{
-	color: red;
+.login-error-w{
+	color: #FF4136;
+}
+
+.invalid-w {
+  color: red;
+}
+
+.valid-w {
+  color: green;
 }

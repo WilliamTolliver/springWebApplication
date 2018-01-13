@@ -2,6 +2,8 @@ package com.wttechnologies.spring.web.service;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,11 @@ public class UserService {
 
 	public void create(User user) {
 		userDAO.create(user);
+	}
+
+	public boolean exists(String username) {
+		// TODO Auto-generated method stub
+		return userDAO.exists(username);
 	}
 
 }

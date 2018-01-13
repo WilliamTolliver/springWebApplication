@@ -1,9 +1,11 @@
 package com.wttechnologies.spring.web.dao;
 
 import javax.sql.DataSource;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,5 +35,11 @@ public class UserDAO {
 
 		return jdbc.update("INSERT into authorities (username, authority) VALUES(:username, :authority)", params) == 1;
 
+	}
+
+	public boolean exists(String username) {
+		// TODO Auto-generated method stub
+		return jdbc.queryForObject("SELECT count(*) FROM users WHERE username=:username",
+				new MapSqlParameterSource("username", username), Integer.class) > 0;
 	}
 }
