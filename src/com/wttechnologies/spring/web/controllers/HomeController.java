@@ -20,4 +20,9 @@ public class HomeController {
 	public String showHome() {
 		return "home";
 	}
+
+	@RequestMapping("/admin")
+	public String showAdmin() {
+		return "admin";
+	}
 }

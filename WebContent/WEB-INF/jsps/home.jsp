@@ -9,8 +9,19 @@
 </head>
 <body>
 
-<p /> <a href="${pageContext.request.contextPath}/offers"> Show all offers </a>
-<p /> <a href="${pageContext.request.contextPath}/createoffer"> Add a new Offer </a>
-
+	<p />
+	<a href="${pageContext.request.contextPath}/offers"> Show all
+		offers </a>
+	<p />
+	<a href="${pageContext.request.contextPath}/createoffer"> Add a new
+		Offer </a>
+	<c:url var="logoutUrl" value="/logout" />
+	<form action="${logoutUrl}" id="logout" method="post">
+		<input type="hidden" name="${_csrf.parameterName}"
+			value="${_csrf.token}" />
+	</form>
+	<a href="#" onclick="document.getElementById('logout').submit();">Logout</a>
+	<p />
+	<a href="${pageContext.request.contextPath}/admin"> Admin Page </a>
 </body>
 </html>
