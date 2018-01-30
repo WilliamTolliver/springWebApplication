@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,8 @@ public class UserDAO {
 
 	// Properties
 	private NamedParameterJdbcTemplate jdbc;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	public UserDAO() {
 		// TODO Auto-generated constructor stub
@@ -32,8 +35,13 @@ public class UserDAO {
 
 	@Transactional
 	public boolean create(User user) {
-		BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(user);
-
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("username", user.getUsername());
+		params.addValue("password", passwordEncoder.encode(user.getPassword()));
+		params.addValue("email", user.getEmail());
+		params.addValue("enabled", user.isEnabled());
+		params.addValue("authority", user.getAuthority());
+		
 		jdbc.update("INSERT into users (username, password, email) VALUES(:username, :password, :email)", params);
 
 		return jdbc.update("INSERT into authorities (username, authority) VALUES(:username, :authority)", params) == 1;
@@ -49,6 +57,7 @@ public class UserDAO {
 	public List<User> getAllUsers() {
 		// TODO Auto-generated method stub
 		System.out.println("Querying All users and their authorities");
-		return jdbc.query("SELECT * FROM users, authorities WHERE users.username = authorities.username", BeanPropertyRowMapper.newInstance(User.class));
+		return jdbc.query("SELECT * FROM users, authorities WHERE users.username = authorities.username",
+				BeanPropertyRowMapper.newInstance(User.class));
 	}
 }

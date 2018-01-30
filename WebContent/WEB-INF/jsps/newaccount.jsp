@@ -72,12 +72,12 @@
 				</tr>
 				<tr>
 					<td>Password: <form:input path="password" class="form-control"
-							type="text" name="password" id="password" /></td>
+							type="password" name="password" id="password" /></td>
 					<td><form:errors path="password" cssClass="invalid-feedback-w"></form:errors></td>
 				</tr>
 				<tr>
 					<td>Confirm Password: <input path="confirmpass" id="confirm"
-						class="form-control" type="text" name="confirmpass" /></td>
+						class="form-control" type="password" name="confirmpass" /></td>
 					<td id="passwordMatch"></td>
 				</tr>
 				<tr>
