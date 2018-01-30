@@ -1,16 +1,25 @@
 package com.wttechnologies.spring.web.controllers;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.wttechnologies.spring.web.service.OffersService;
+import com.wttechnologies.spring.web.dao.User;
+import com.wttechnologies.spring.web.service.UserService;
 
 @Controller
 public class HomeController {
 
 	// Properties
-	private OffersService offersService;
+	@Autowired
+	UserService userService;
+	NamedParameterJdbcTemplate jdbc;
 
 	public HomeController() {
 		// TODO Auto-generated constructor stub
@@ -22,7 +31,10 @@ public class HomeController {
 	}
 
 	@RequestMapping("/admin")
-	public String showAdmin() {
+	public String showAdmin(Model model) {
+		
+		List<User> users = userService.getAllUsers();
+		model.addAttribute("users",users);
 		return "admin";
 	}
 }

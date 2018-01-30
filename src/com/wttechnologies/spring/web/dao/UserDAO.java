@@ -1,9 +1,12 @@
 package com.wttechnologies.spring.web.dao;
 
+import java.util.List;
+
 import javax.sql.DataSource;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -41,5 +44,11 @@ public class UserDAO {
 		// TODO Auto-generated method stub
 		return jdbc.queryForObject("SELECT count(*) FROM users WHERE username=:username",
 				new MapSqlParameterSource("username", username), Integer.class) > 0;
+	}
+
+	public List<User> getAllUsers() {
+		// TODO Auto-generated method stub
+		System.out.println("Querying All users and their authorities");
+		return jdbc.query("SELECT * FROM users, authorities WHERE users.username = authorities.username", BeanPropertyRowMapper.newInstance(User.class));
 	}
 }

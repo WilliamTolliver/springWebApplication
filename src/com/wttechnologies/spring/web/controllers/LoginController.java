@@ -25,7 +25,12 @@ public class LoginController {
 
 		return "login-page";
 	}
-	
+
+	@RequestMapping("/denied")
+	public String showDenied() {
+		return "denied";
+	}
+
 	@RequestMapping("/loggedout")
 	public String showLoggedOut() {
 
@@ -46,12 +51,12 @@ public class LoginController {
 
 		user.setAuthority("user");
 		user.setEnabled(true);
-		
-		if(userService.exists(user.getUsername())) {
+
+		if (userService.exists(user.getUsername())) {
 			result.rejectValue("username", "DuplicateKey.user.username");
 			return "newaccount";
 		}
-		
+
 		try {
 			userService.create(user);
 		} catch (DuplicateKeyException e) {
