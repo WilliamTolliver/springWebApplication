@@ -11,6 +11,7 @@
 		<config>src/com/wttechnologies/spring/web/config/dao-beans.xml</config>
 		<config>src/com/wttechnologies/spring/web/config/service-context.xml</config>
 		<config>src/com/wttechnologies/spring/web/config/security-context.xml</config>
+		<config>test/com/wttechnologies/spring/web/test/config/datasource.xml</config>
 	</configs>
 	<autoconfigs>
 	</autoconfigs>
