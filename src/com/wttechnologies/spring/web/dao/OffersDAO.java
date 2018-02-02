@@ -7,7 +7,6 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -27,8 +26,8 @@ public class OffersDAO {
 		// TODO Auto-generated constructor stub
 		System.out.println("Successfully loaded OffersDAO");
 	}
-	
-	//Configured Basic DataSource from JDBC
+
+	// Configured Basic DataSource from JDBC
 	@Autowired
 	public void setDataSource(DataSource jdbc) {
 		this.jdbc = new NamedParameterJdbcTemplate(jdbc);
@@ -40,19 +39,20 @@ public class OffersDAO {
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("name", "Sue");
 
-		return jdbc.query("Select * from offers", new RowMapper<Offer>() {
+		return jdbc.query(
+				"Select * from offers, users where offers.username = users.username and users.enabled=true",
+				params, new OfferRowMapper());
+	}
 
-			public Offer mapRow(ResultSet rs, int rowNum) throws SQLException {
-				// TODO Auto-generated method stub
-				Offer offer = new Offer();
-				offer.setId(rs.getInt("id"));
-				offer.setName(rs.getString("name"));
-				offer.setText(rs.getString("text"));
-				offer.setEmail(rs.getString("email"));
-				return offer;
-			}
+	public List<Offer> getOffers(String username) {
 
-		});
+		// properties
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("name", "Sue");
+
+		return jdbc.query(
+				"Select * from offers, users WHERE offers.username = users.username and users.enabled=true and offers.username = :username",
+				new MapSqlParameterSource("username", username),new OfferRowMapper());
 	}
 
 	public Offer findOffer(int id) {
@@ -62,25 +62,26 @@ public class OffersDAO {
 		System.out.println(id);
 		params.addValue("id", id);
 
-		return jdbc.queryForObject("Select * from offers where id = :id", params, new RowMapper<Offer>() {
+		return jdbc.queryForObject(
+				"Select * from offers, users where offers.username = users.username and users.enabled=true and id = :id",
+				params, new OfferRowMapper());
+	}
+	
+	public Offer findOffer(String username) {
 
-			public Offer mapRow(ResultSet rs, int rowNum) throws SQLException {
-				// TODO Auto-generated method stub
-				Offer offer = new Offer();
-				offer.setId(rs.getInt("id"));
-				offer.setName(rs.getString("name"));
-				offer.setText(rs.getString("text"));
-				offer.setEmail(rs.getString("email"));
-				return offer;
-			}
+		// properties
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("username", username);
 
-		});
+		return jdbc.queryForObject(
+				"Select * from offers, users where offers.username = users.username and users.enabled=true and id = :id",
+				params, new OfferRowMapper());
 	}
 
 	public boolean create(Offer offer) {
 		BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(offer);
 
-		return jdbc.update("INSERT into offers (name, text, email) VALUES(:name, :text, :email)", params) == 1;
+		return jdbc.update("INSERT into offers (username, text) VALUES(:username, :text)", params) == 1;
 
 	}
 
@@ -88,7 +89,13 @@ public class OffersDAO {
 	public int[] create(List<Offer> offers) {
 
 		SqlParameterSource[] params = SqlParameterSourceUtils.createBatch(offers.toArray());
-		return jdbc.batchUpdate("INSERT into offers (name, text, email) VALUES(:name, :text, :email)", params);
+		return jdbc.batchUpdate("INSERT into offers (username, text) VALUES(:username, :text)", params);
+	}
+
+	public boolean update(Offer offer) {
+		BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(offer);
+
+		return jdbc.update("UPDATE offers set text=:text where id=:id", params) == 1;
 	}
 
 	public boolean delete(int id) {

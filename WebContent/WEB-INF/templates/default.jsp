@@ -9,6 +9,7 @@
 <head>
 <link rel="stylesheet" type="text/css"
 	href="resources/css/bootstrap-lumen.css">
+<script type="text/javascript" src="resources/js/jquery-3.2.1.min.js"></script>
 <link rel="stylesheet" type="text/css" href="resources/css/errors.css">
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title><tiles:insertAttribute name="title"></tiles:insertAttribute>

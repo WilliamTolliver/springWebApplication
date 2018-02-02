@@ -24,7 +24,6 @@ public class UserDAO {
 
 	public UserDAO() {
 		// TODO Auto-generated constructor stub
-		System.out.println("Successfully loaded OffersDAO");
 	}
 
 	// Configured Basic DataSource from JDBC
@@ -39,12 +38,13 @@ public class UserDAO {
 		params.addValue("username", user.getUsername());
 		params.addValue("password", passwordEncoder.encode(user.getPassword()));
 		params.addValue("email", user.getEmail());
+		params.addValue("name", user.getName());
 		params.addValue("enabled", user.isEnabled());
 		params.addValue("authority", user.getAuthority());
-		
-		jdbc.update("INSERT into users (username, password, email, enabled) VALUES(:username, :password, :email, :enabled)", params);
 
-		return jdbc.update("INSERT into authorities (username, authority) VALUES(:username, :authority)", params) == 1;
+		return jdbc.update(
+				"INSERT into users (username, password, email, enabled, name, authority) VALUES(:username, :password, :email, :enabled, :name, :authority)",
+				params) == 1;
 
 	}
 
@@ -57,7 +57,7 @@ public class UserDAO {
 	public List<User> getAllUsers() {
 		// TODO Auto-generated method stub
 		System.out.println("Querying All users and their authorities");
-		return jdbc.query("SELECT * FROM users, authorities WHERE users.username = authorities.username",
+		return jdbc.query("SELECT * FROM users",
 				BeanPropertyRowMapper.newInstance(User.class));
 	}
 }

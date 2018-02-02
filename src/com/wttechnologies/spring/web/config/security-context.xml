@@ -9,8 +9,8 @@
 		<security:authentication-provider>
 			<security:jdbc-user-service
 				data-source-ref="dataSource"
-				authorities-by-username-query='SELECT * FROM authorities WHERE binary username = ?'
-				users-by-username-query="SELECT * FROM users WHERE binary username = ?"
+				authorities-by-username-query='SELECT username, authority FROM users WHERE binary username = ?'
+				users-by-username-query="SELECT username, password, enabled FROM users WHERE binary username = ?"
 				id="jdbcUserService" />
 			<security:password-encoder ref="passwordEncoder"></security:password-encoder>
 		</security:authentication-provider>
@@ -19,6 +19,8 @@
 		<security:intercept-url pattern="/admin"
 			access="hasAuthority('ROLE_ADMIN')" />
 		<security:intercept-url pattern="/createoffer"
+			access="isAuthenticated()" />
+		<security:intercept-url pattern="/offerdeleted"
 			access="isAuthenticated()" />
 		<security:intercept-url pattern="/docreate"
 			access="isAuthenticated()" />
@@ -38,6 +40,8 @@
 		<security:intercept-url pattern="/resources/**"
 			access="permitAll" />
 		<security:intercept-url pattern="/login-page"
+			access="permitAll" />
+		<security:intercept-url pattern="/logout"
 			access="permitAll" />
 		<security:intercept-url pattern="/offers"
 			access="permitAll" />

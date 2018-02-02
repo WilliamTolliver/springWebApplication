@@ -13,6 +13,11 @@
 			<td><form:errors path="username" cssClass="invalid-feedback-w"></form:errors></td>
 		</tr>
 		<tr>
+			<td>Name: <form:input path="name" class="form-control"
+					type="text" name="name" /></td>
+			<td><form:errors path="name" cssClass="invalid-feedback-w"></form:errors></td>
+		</tr>
+		<tr>
 			<td>Email: <form:input path="email" class="form-control"
 					type="text" name="email" />
 			<td><form:errors path="email" cssClass="invalid-feedback-w"></form:errors></td>

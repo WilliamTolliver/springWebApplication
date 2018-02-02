@@ -11,36 +11,27 @@
 </head>
 <body>
 
-	<p />
-
-	<a href="${pageContext.request.contextPath}/offers"> Show all
-		offers </a>
-	<p />
-
-	<a href="${pageContext.request.contextPath}/createoffer"> Add a new
-		Offer </a>
-
-	<p />
-	
-		<sec:authorize access="!isAuthenticated()">
-		<a href="http://localhost:8080/spring/login-page" >Login</a>
-	</sec:authorize>
-	
-	
-		<sec:authorize access="isAuthenticated()">
-		<c:url var="logoutUrl" value="/logout" />
-		<form action="${logoutUrl}" id="logout" method="post">
-			<input type="hidden" name="${_csrf.parameterName}"
-					value="${_csrf.token}" />
-		</form>
-		<a href="#" onclick="document.getElementById('logout').submit();">Logout</a>
-	</sec:authorize>
-	
-	<p />
-	
-	
 	<sec:authorize access="hasAuthority('ROLE_ADMIN')">
 		<a href="${pageContext.request.contextPath}/admin"> Admin Page </a>
 	</sec:authorize>
+
+	<c:forEach var="offer" items="${offers}">
+    Id: ${offer.id}<br />
+    Name: ${offer.user.name}<br />
+    Email: ${offer.user.email}<br />
+    Desc: ${offer.text}<br />
+		<hr />
+	</c:forEach>
+
+	<c:choose>
+		<c:when test="${hasOffer}">
+			<a href="${pageContext.request.contextPath}/createoffer">Edit or
+				delete your Offer</a>
+		</c:when>
+		<c:otherwise>
+			<a href="${pageContext.request.contextPath}/createoffer">Create
+				Offer</a>
+		</c:otherwise>
+	</c:choose>
 </body>
 </html>

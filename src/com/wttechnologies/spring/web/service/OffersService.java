@@ -2,6 +2,8 @@ package com.wttechnologies.spring.web.service;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
@@ -23,10 +25,53 @@ public class OffersService {
 	public void setOffersDAO(OffersDAO offersDAO) {
 		this.offersDAO = offersDAO;
 	}
-	
-	@Secured({"ROLE_ADMIN", "ROLE_USER"})
+
+	@Secured({ "ROLE_ADMIN", "ROLE_USER" })
 	public void createOffer(Offer offer) {
 		offersDAO.create(offer);
 	}
-	
+
+	public boolean hasOffer(String name) {
+		// TODO Auto-generated method stub
+		if (name == null) {
+			return false;
+		}
+		List<Offer> offers = offersDAO.getOffers(name);
+
+		if (offers.size() == 0) {
+			return false;
+		}
+
+		return true;
+	}
+
+	public Offer findOffer(String username) {
+
+		if (username == null) {
+			return null;
+		}
+		List<Offer> offers = offersDAO.getOffers(username);
+
+		if (offers.size() == 0) {
+			return null;
+		}
+
+		// TODO Auto-generated method stub
+		return offers.get(0);
+	}
+
+	public void saveOrUpdate(Offer offer) {
+		// TODO Auto-generated method stub
+		if (offer.getId() != 0) {
+			offersDAO.update(offer);
+		} else {
+			offersDAO.create(offer);
+		}
+	}
+
+	public void delete(int id) {
+		// TODO Auto-generated method stub
+		offersDAO.delete(id);
+	}
+
 }
