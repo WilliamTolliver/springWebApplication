@@ -4,10 +4,11 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -20,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserDAO {
 
 	// Properties
-	private NamedParameterJdbcTemplate jdbc;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	@Autowired
@@ -28,12 +28,6 @@ public class UserDAO {
 
 	public UserDAO() {
 		// TODO Auto-generated constructor stub
-	}
-
-	// Configured Basic DataSource from JDBC
-	@Autowired
-	public void setDataSource(DataSource jdbc) {
-		this.jdbc = new NamedParameterJdbcTemplate(jdbc);
 	}
 
 	public Session getSession() {
@@ -48,8 +42,10 @@ public class UserDAO {
 
 	public boolean exists(String username) {
 		// TODO Auto-generated method stub
-		return jdbc.queryForObject("SELECT count(*) FROM users WHERE username=:username",
-				new MapSqlParameterSource("username", username), Integer.class) > 0;
+		Criteria crit = getSession().createCriteria(User.class);
+		crit.add(Restrictions.idEq(username));
+		User user = (User) crit.uniqueResult();
+		return user != null;
 	}
 
 	public List<User> getAllUsers() {

@@ -1,6 +1,7 @@
 package com.wttechnologies.spring.web.test.tests;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -71,8 +72,18 @@ public class UserDAOTests {
 
 		assertEquals("Should return one user", 1, users.size());
 
-		assertTrue("User should exist", userDAO.exists(user.getUsername()));
-
 		assertEquals("User should equal user that is returned", user, users.get(0));
 	}
+	
+	@Test
+	public void testExists() {
+		//Create users
+		
+		userDAO.create(user2);
+		
+		assertTrue("User should exist", userDAO.exists(user2.getUsername()));
+		assertFalse("User should exist", userDAO.exists("Hemoglobin"));
+
+	}
+
 }
