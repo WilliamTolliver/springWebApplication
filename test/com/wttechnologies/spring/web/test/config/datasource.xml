@@ -45,5 +45,8 @@
 				</props>
 			</property>
 		</bean>
+		<bean id="exceptionTranslator"
+			class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor">
+		</bean>
 	</beans>
 </beans>
