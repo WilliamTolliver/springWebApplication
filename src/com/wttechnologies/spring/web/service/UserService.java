@@ -5,10 +5,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.wttechnologies.spring.web.dao.User;
 import com.wttechnologies.spring.web.dao.UserDAO;
 
+@Transactional
 @Service("userService")
 public class UserService {
 

@@ -3,17 +3,18 @@ package com.wttechnologies.spring.web.dao;
 import java.util.List;
 
 import javax.sql.DataSource;
-import javax.validation.Valid;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @Component("userDAO")
 public class UserDAO {
 
@@ -21,6 +22,8 @@ public class UserDAO {
 	private NamedParameterJdbcTemplate jdbc;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private SessionFactory sessionFactory;
 
 	public UserDAO() {
 		// TODO Auto-generated constructor stub
@@ -32,20 +35,13 @@ public class UserDAO {
 		this.jdbc = new NamedParameterJdbcTemplate(jdbc);
 	}
 
+	public Session getSession() {
+		return sessionFactory.getCurrentSession();
+	}
+
 	@Transactional
-	public boolean create(User user) {
-		MapSqlParameterSource params = new MapSqlParameterSource();
-		params.addValue("username", user.getUsername());
-		params.addValue("password", passwordEncoder.encode(user.getPassword()));
-		params.addValue("email", user.getEmail());
-		params.addValue("name", user.getName());
-		params.addValue("enabled", user.isEnabled());
-		params.addValue("authority", user.getAuthority());
-
-		return jdbc.update(
-				"INSERT into users (username, password, email, enabled, name, authority) VALUES(:username, :password, :email, :enabled, :name, :authority)",
-				params) == 1;
-
+	public void create(User user) {
+		getSession().save(user);
 	}
 
 	public boolean exists(String username) {
@@ -57,7 +53,9 @@ public class UserDAO {
 	public List<User> getAllUsers() {
 		// TODO Auto-generated method stub
 		System.out.println("Querying All users and their authorities");
-		return jdbc.query("SELECT * FROM users",
-				BeanPropertyRowMapper.newInstance(User.class));
+		// return jdbc.query("SELECT * FROM users",
+		// BeanPropertyRowMapper.newInstance(User.class));
+		return getSession().createQuery("From User").list();
+
 	}
 }

@@ -44,14 +44,14 @@ public class UserDAOTests {
 	public void testCreateUser() {
 		User user = new User("Kevin", "KevinThompson", "Kevin123", "Kevin@gmail.com", true, "user");
 
-		assertTrue("User creation should return true", userDAO.create(user));
-		
+		userDAO.create(user);
+
 		List<User> users = userDAO.getAllUsers();
-		
+
 		assertEquals("Should return one user", 1, users.size());
 
 		assertTrue("User should exist", userDAO.exists(user.getUsername()));
-		
+
 		assertEquals("User should equal user that is returned", user, users.get(0));
 	}
 }
