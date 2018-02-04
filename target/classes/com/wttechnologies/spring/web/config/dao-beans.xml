@@ -17,8 +17,26 @@
 			expected-type="javax.sql.DataSource">
 		</jee:jndi-lookup>
 		<bean id="transactionManager"
-			class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+			class="org.springframework.orm.hibernate4.HibernateTransactionManager">
 			<property name="dataSource" ref="dataSource"></property>
+			<property name="sessionFactory" ref="sessionFactory"></property>
+		</bean>
+
+		<bean id="sessionFactory"
+			class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+			<property name="packagesToScan" value="com.wttechnologies.spring.web.dao" />
+			<property name="dataSource" ref="dataSource"></property>
+			<property name="hibernateProperties">
+				<props>
+					<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+					<prop key="javax.persistence.validation.group.pre-persist">com.wttechnologies.spring.web.dao.PersistenceValidationGroup
+					</prop>
+					<prop key="javax.persistence.validation.group.pre-update">com.wttechnologies.spring.web.dao.PersistenceValidationGroup
+					</prop>
+					<prop key="javax.persistence.validation.group.pre-remove">com.wttechnologies.spring.web.dao.PersistenceValidationGroup
+					</prop>
+				</props>
+			</property>
 		</bean>
 		<tx:annotation-driven />
 	</beans>

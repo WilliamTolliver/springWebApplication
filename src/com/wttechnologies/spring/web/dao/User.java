@@ -15,23 +15,24 @@ import com.wttechnologies.spring.web.validation.ValidEmail;
 public class User {
 
 	// Declarations
-	@Size(min = 8, max = 18)
-	@NotBlank
-	@Pattern(regexp = "^\\w{8,}$")
+	
+	@Size(min = 8, max = 18, groups= {PersistenceValidationGroup.class, FormValidationGroup.class})
+	@NotBlank(groups= {PersistenceValidationGroup.class, FormValidationGroup.class})
+	@Pattern(regexp = "^\\w{8,}$", groups= {PersistenceValidationGroup.class, FormValidationGroup.class})
 	@Id
 	@Column(name="username")
 	private String username;
 
 	@NotBlank
-	@Size(min = 2, max = 25)
+	@Size(min = 2, max = 25, groups= {PersistenceValidationGroup.class, FormValidationGroup.class})
 	private String name;
 
-	@NotBlank
-	@Pattern(regexp = "^\\S+$")
-	@Size(min = 8, max = 15)
+	@NotBlank(groups= {PersistenceValidationGroup.class, FormValidationGroup.class})
+	@Pattern(regexp = "^\\S+$", groups= {PersistenceValidationGroup.class, FormValidationGroup.class})
+	@Size(min = 8, max = 15, groups= {FormValidationGroup.class})
 	private String password;
 	@NotBlank
-	@ValidEmail
+	@ValidEmail(groups= {PersistenceValidationGroup.class, FormValidationGroup.class})
 	private String email;
 	private boolean enabled = false;
 	private String authority;
