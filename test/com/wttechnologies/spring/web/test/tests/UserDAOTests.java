@@ -33,11 +33,32 @@ public class UserDAOTests {
 	private DataSource dataSource;
 	private Logger logger = Logger.getLogger(UserDAOTests.class);
 
+	// Creating dummy users
+	private User user = new User("Kevin", "KevinThompson", "Kevin123", "Kevin@gmail.com", true, "user");
+	private User user2 = new User("Arnold", "ArnoldHayward", "Arnold123", "Arnold@gmail.com", true, "user");
+	private User user3 = new User("Jimmy", "JimmyMcGill", "Jimmy123", "Jimmy@gmail.com", true, "user");
+
 	@Before
 	public void init() {
 		JdbcTemplate jdbc = new JdbcTemplate(dataSource);
 		jdbc.execute("DELETE FROM offers");
 		jdbc.execute("DELETE FROM users");
+	}
+
+	@Test
+	public void retreiveUsers() {
+		userDAO.create(user);
+
+		List<User> users1 = userDAO.getAllUsers();
+
+		assertEquals("Inserted users equals: ", user, users1.get(0));
+
+		userDAO.create(user2);
+		userDAO.create(user3);
+
+		List<User> users2 = userDAO.getAllUsers();
+
+		assertEquals("Inserted users equals: ", 3, users2.size());
 	}
 
 	@Test
