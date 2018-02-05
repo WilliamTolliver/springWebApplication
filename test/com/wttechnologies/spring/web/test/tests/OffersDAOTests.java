@@ -35,7 +35,7 @@ public class OffersDAOTests {
 	private UserDAO userDAO;
 	@Autowired
 	private DataSource dataSource;
-	//private Logger logger = Logger.getLogger(OffersDAOTests.class);
+	// private Logger logger = Logger.getLogger(OffersDAOTests.class);
 
 	User user, user2;
 
@@ -65,8 +65,8 @@ public class OffersDAOTests {
 
 	@Test
 	public void TestGetUserOffers() {
-		
-		//Create offer 1
+
+		// Create offer 1
 		Offer offer = new Offer(user, "Kevin does FGC instruction");
 		offersDAO.saveOrUpdate(offer);
 
@@ -95,13 +95,35 @@ public class OffersDAOTests {
 
 		assertEquals("Should return one offer", 2, offers.size());
 	}
-	
+
 	@Test
 	public void testUpdate() {
 		Offer offer2 = new Offer(user, "This is another offer by Kevin for MMA training.");
 		offersDAO.saveOrUpdate(offer2);
-		
+
 		offer2.setText("This is an offer to teach Rescue diving");
 		offersDAO.saveOrUpdate(offer2);
+	}
+
+	@Test
+	public void testDelete() {
+		Offer offer2 = new Offer(user, "This is another offer by Kevin for MMA training.");
+		offersDAO.saveOrUpdate(offer2);
+
+		List<Offer> offers = offersDAO.getOffers();
+
+		offersDAO.delete(offers.get(0).getId());
+
+	}
+
+	@Test
+	public void findOffer() {
+		Offer offer2 = new Offer(user, "This is another offer by Kevin for MMA training.");
+		offersDAO.saveOrUpdate(offer2);
+
+		List<Offer> offers = offersDAO.getOffers();
+
+		offersDAO.findOffer(offers.get(0).getId());
+		offersDAO.findOffer(user.getUsername());
 	}
 }

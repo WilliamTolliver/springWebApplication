@@ -56,4 +56,8 @@ public class UserDAO {
 		return getSession().createQuery("From User").list();
 
 	}
+	
+	public void delete(int id) {
+		getSession().createQuery("DELTE FROM USER WHERE id=:id");
+	}
 }
