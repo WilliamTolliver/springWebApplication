@@ -83,10 +83,6 @@ public class OffersDAO {
 				params, new OfferRowMapper());
 	}
 
-	public void create(Offer offer) {
-		getSession().save(offer);
-	}
-
 	@Transactional
 	public int[] create(List<Offer> offers) {
 
@@ -94,10 +90,8 @@ public class OffersDAO {
 		return jdbc.batchUpdate("INSERT into offers (username, text) VALUES(:username, :text)", params);
 	}
 
-	public boolean update(Offer offer) {
-		BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(offer);
-
-		return jdbc.update("UPDATE offers set text=:text where id=:id", params) == 1;
+	public void saveOrUpdate(Offer offer) {
+		getSession().save(offer);
 	}
 
 	public boolean delete(int id) {

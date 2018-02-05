@@ -60,7 +60,7 @@ public class OffersDAOTests {
 
 		Offer offer = new Offer(user, "Kevin does FGC instruction");
 
-		offersDAO.create(offer);
+		offersDAO.saveOrUpdate(offer);
 	}
 
 	@Test
@@ -68,12 +68,12 @@ public class OffersDAOTests {
 		
 		//Create offer 1
 		Offer offer = new Offer(user, "Kevin does FGC instruction");
-		offersDAO.create(offer);
+		offersDAO.saveOrUpdate(offer);
 
 		// Second offer
 		Offer offer2 = new Offer(user, "This is another offer by Kevin for MMA training.");
 
-		offersDAO.create(offer2);
+		offersDAO.saveOrUpdate(offer2);
 
 		List<Offer> userOffers = offersDAO.getOffers(user.getUsername());
 
@@ -84,16 +84,24 @@ public class OffersDAOTests {
 	public void testRetrieveManyOffers() {
 		Offer offer = new Offer(user2, "Kevin does FGC instruction");
 
-		offersDAO.create(offer);
+		offersDAO.saveOrUpdate(offer);
 
 		// Second offer
 		Offer offer2 = new Offer(user, "This is another offer by Kevin for MMA training.");
 
-		offersDAO.create(offer2);
+		offersDAO.saveOrUpdate(offer2);
 
 		List<Offer> offers = offersDAO.getOffers();
 
 		assertEquals("Should return one offer", 2, offers.size());
-
+	}
+	
+	@Test
+	public void testUpdate() {
+		Offer offer2 = new Offer(user, "This is another offer by Kevin for MMA training.");
+		offersDAO.saveOrUpdate(offer2);
+		
+		offer2.setText("This is an offer to teach Rescue diving");
+		offersDAO.saveOrUpdate(offer2);
 	}
 }

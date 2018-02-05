@@ -28,7 +28,7 @@ public class OffersService {
 
 	@Secured({ "ROLE_ADMIN", "ROLE_USER" })
 	public void createOffer(Offer offer) {
-		offersDAO.create(offer);
+		offersDAO.saveOrUpdate(offer);
 	}
 
 	public boolean hasOffer(String name) {
@@ -62,11 +62,7 @@ public class OffersService {
 
 	public void saveOrUpdate(Offer offer) {
 		// TODO Auto-generated method stub
-		if (offer.getId() != 0) {
-			offersDAO.update(offer);
-		} else {
-			offersDAO.create(offer);
-		}
+		offersDAO.saveOrUpdate(offer);
 	}
 
 	public void delete(int id) {
