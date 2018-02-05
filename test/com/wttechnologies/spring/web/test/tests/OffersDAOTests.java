@@ -65,8 +65,9 @@ public class OffersDAOTests {
 
 	@Test
 	public void TestGetUserOffers() {
+		
+		//Create offer 1
 		Offer offer = new Offer(user, "Kevin does FGC instruction");
-
 		offersDAO.create(offer);
 
 		// Second offer

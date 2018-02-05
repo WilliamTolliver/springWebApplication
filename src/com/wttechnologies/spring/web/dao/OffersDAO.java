@@ -4,8 +4,10 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -40,22 +42,22 @@ public class OffersDAO {
 	public List<Offer> getOffers() {
 
 		// properties
-		MapSqlParameterSource params = new MapSqlParameterSource();
-		params.addValue("name", "Sue");
+		Criteria crit = getSession().createCriteria(Offer.class);
+		crit.createAlias("user", "u").add(Restrictions.eq("u.enabled", true));
 
-		return jdbc.query("Select * from offers, users where offers.username = users.username and users.enabled=true",
-				params, new OfferRowMapper());
+		return crit.list();
 	}
 
 	public List<Offer> getOffers(String username) {
 
 		// properties
-		MapSqlParameterSource params = new MapSqlParameterSource();
-		params.addValue("name", "Sue");
+		Criteria crit = getSession().createCriteria(Offer.class);
+		crit.createAlias("user", "u");
+		crit.add(Restrictions.eq("u.enabled", true));
+		crit.add(Restrictions.eq("u.username", username));
 
-		return jdbc.query(
-				"Select * from offers, users WHERE offers.username = users.username and users.enabled=true and offers.username = :username",
-				new MapSqlParameterSource("username", username), new OfferRowMapper());
+		return crit.list();
+
 	}
 
 	public Offer findOffer(int id) {
