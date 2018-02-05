@@ -35,38 +35,64 @@ public class OffersDAOTests {
 	private UserDAO userDAO;
 	@Autowired
 	private DataSource dataSource;
-	private Logger logger = Logger.getLogger(OffersDAOTests.class);
+	//private Logger logger = Logger.getLogger(OffersDAOTests.class);
+
+	User user, user2;
 
 	@Before
 	public void init() {
 		JdbcTemplate jdbc = new JdbcTemplate(dataSource);
 		jdbc.execute("DELETE FROM offers");
 		jdbc.execute("DELETE FROM users");
+
+		// Create users for offers
+		user = new User("Kevin", "KevinPrime", "Kevin123", "Kevin@gmail.com", true, "ROLE_USER");
+
+		userDAO.create(user);
+
+		user2 = new User("William", "WilliamToll", "William123", "William@gmail.com", true, "ROLE_USER");
+
+		userDAO.create(user2);
 	}
 
 	@Test
 	public void testCreateOffer() {
-		User user = new User("Kevin", "KevinPrime", "Kevin123", "Kevin@gmail.com", true, "ROLE_USER");
-
-		userDAO.create(user);
 
 		Offer offer = new Offer(user, "Kevin does FGC instruction");
 
-		assertTrue("User creation should return true", offersDAO.create(offer));
+		offersDAO.create(offer);
+	}
+
+	@Test
+	public void TestGetUserOffers() {
+		Offer offer = new Offer(user, "Kevin does FGC instruction");
+
+		offersDAO.create(offer);
+
+		// Second offer
+		Offer offer2 = new Offer(user, "This is another offer by Kevin for MMA training.");
+
+		offersDAO.create(offer2);
+
+		List<Offer> userOffers = offersDAO.getOffers(user.getUsername());
+
+		assertEquals("Number of offers should match", 2, userOffers.size());
+	}
+
+	@Test
+	public void testRetrieveManyOffers() {
+		Offer offer = new Offer(user2, "Kevin does FGC instruction");
+
+		offersDAO.create(offer);
+
+		// Second offer
+		Offer offer2 = new Offer(user, "This is another offer by Kevin for MMA training.");
+
+		offersDAO.create(offer2);
 
 		List<Offer> offers = offersDAO.getOffers();
 
-		assertEquals("Should return one user", 1, offers.size());
+		assertEquals("Should return one offer", 2, offers.size());
 
-		assertEquals("User should equal user that is returned", offer, offers.get(0));
-		
-		//Second offer
-		Offer offer2 = new Offer(user, "This is another offer by Kevin for MMA training.");
-		
-		assertTrue("User creation should return true", offersDAO.create(offer2));
-		
-		List<Offer> userOffers = offersDAO.getOffers(user.getUsername());
-	
-		assertEquals("Number of offers should match",  2, userOffers.size() );
 	}
 }

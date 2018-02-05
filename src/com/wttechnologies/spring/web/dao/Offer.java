@@ -1,18 +1,27 @@
 package com.wttechnologies.spring.web.dao;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
-import com.wttechnologies.spring.web.validation.ValidEmail;
-
+@Entity
+@Table(name = "offers")
 public class Offer {
 
 	// Properties
-	@Size(min = 5, max = 255, message = "Name must be between 5 and 100 characters")
+	@Size(min = 5, max = 255, message = "Name must be between 5 and 100 characters", groups = {
+			PersistenceValidationGroup.class, FormValidationGroup.class })
 	private String text;
+	@Id
+	@GeneratedValue
 	private int id;
 
+	@ManyToOne
+	@JoinColumn(name = "username")
 	private User user;
 
 	public Offer() {
@@ -55,9 +64,9 @@ public class Offer {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
+
 	public String getUsername() {
-		
+
 		return this.user.getUsername();
 	}
 

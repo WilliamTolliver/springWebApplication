@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -16,10 +18,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component("offersDAO")
 @Repository
+@Transactional
 public class OffersDAO {
 
 	// Properties
 	private NamedParameterJdbcTemplate jdbc;
+	@Autowired
+	private SessionFactory sessionFactory;
 
 	public OffersDAO() {
 		// TODO Auto-generated constructor stub
@@ -38,8 +43,7 @@ public class OffersDAO {
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("name", "Sue");
 
-		return jdbc.query(
-				"Select * from offers, users where offers.username = users.username and users.enabled=true",
+		return jdbc.query("Select * from offers, users where offers.username = users.username and users.enabled=true",
 				params, new OfferRowMapper());
 	}
 
@@ -51,7 +55,7 @@ public class OffersDAO {
 
 		return jdbc.query(
 				"Select * from offers, users WHERE offers.username = users.username and users.enabled=true and offers.username = :username",
-				new MapSqlParameterSource("username", username),new OfferRowMapper());
+				new MapSqlParameterSource("username", username), new OfferRowMapper());
 	}
 
 	public Offer findOffer(int id) {
@@ -65,7 +69,7 @@ public class OffersDAO {
 				"Select * from offers, users where offers.username = users.username and users.enabled=true and id = :id",
 				params, new OfferRowMapper());
 	}
-	
+
 	public Offer findOffer(String username) {
 
 		// properties
@@ -77,11 +81,8 @@ public class OffersDAO {
 				params, new OfferRowMapper());
 	}
 
-	public boolean create(Offer offer) {
-		BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(offer);
-
-		return jdbc.update("INSERT into offers (username, text) VALUES(:username, :text)", params) == 1;
-
+	public void create(Offer offer) {
+		getSession().save(offer);
 	}
 
 	@Transactional
@@ -100,6 +101,10 @@ public class OffersDAO {
 	public boolean delete(int id) {
 		MapSqlParameterSource params = new MapSqlParameterSource("id", id);
 		return jdbc.update("Delete from offers where id = :id", params) == 1;
+	}
+
+	public Session getSession() {
+		return sessionFactory.getCurrentSession();
 	}
 
 }
